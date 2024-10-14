@@ -51,6 +51,8 @@ class FutaModel(models.Model):
     FourthTrimester = models.CharField(max_length=50, null=True, blank=True)
     TotalTaxLiability = models.CharField(max_length=50, null=True, blank=True)
     IRSEmployAllow = models.BooleanField()
+    IRSEmployName = models.CharField(max_length=50, null=True, blank=True)
+    IRSEmployPhone = models.CharField(max_length=11, null=True, blank=True)
     IRSPinNumber = models.CharField(max_length=5, null=True, blank=True)
     Name = models.CharField(max_length=50, null=True, blank=True)
     Position = models.CharField(max_length=50, null=True, blank=True)
