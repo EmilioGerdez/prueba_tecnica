@@ -6,12 +6,6 @@ from django.utils import choices
 
 
 class FutaModel(models.Model):
-    DECLARATION_TYPE = (
-        ("a", "Enmendada"),
-        ("b", "Empleador sucesor"),
-        ("c", "Ningun pago hecho a los empleados en 2023"),
-        ("d", "Final: se cerro el negocio o dejo de pagar salarios"),
-    )
 
     EiNumber = models.CharField(max_length=9)
     LegalName = models.CharField(max_length=50)
@@ -23,10 +17,12 @@ class FutaModel(models.Model):
     ForeignCountry = models.CharField(max_length=50, null=True, blank=True)
     ForeignState = models.CharField(max_length=50, null=True, blank=True)
     ForeignZip = models.CharField(max_length=5, null=True, blank=True)
-    DeclarationType = models.CharField(
-        max_length=2, choices=DECLARATION_TYPE, default="a"
-    )
-    Pt1A = models.CharField(max_length=2)
+    DeclarationA = models.BooleanField()
+    DeclarationB = models.BooleanField()
+    DeclarationC = models.BooleanField()
+    DeclarationD = models.BooleanField()
+    Pt1A1 = models.CharField(max_length=1)
+    Pt1A2 = models.CharField(max_length=1)
     Pt1B = models.BooleanField()
     Pt12 = models.BooleanField()
     TotalEmployePayment = models.CharField(max_length=50, null=True, blank=True)
