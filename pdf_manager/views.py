@@ -17,6 +17,13 @@ def Fill_Futa(pk:int):
     CreditReductionWhole, CreditReductionDecimal= futa.CreditReduction.split(".")
     TotalFutaFeeAfterAdjustWhole, TotalFutaFeeAfterAdjustDecimal = futa.TotalFutaFeeAfterAdjust.split(".")
     FutaFeeYearIncludingExcessWhole, FutaFeeYearIncludingExcessDecimal= futa.FutaFeeYearIncludingExces.split(".")
+    BalanceDueWhole, BalanceDueDecimal = futa.BalanceDue.split(".")
+    ExcessPaymentWhole2, ExcessPaymentDecimal2 = futa.ExcessPayment2.split(".")
+    FirstTrimesterWhole, FirstTrimesterDecimal = futa.FirstTrimester.split(".")
+    SecondTrimesterWhole, SecondTrimesterDecimal = futa.SecondTrimester.split(".")
+    ThirdTrimesterWhole, ThirdTrimesterDecimal = futa.ThirdTrimester.split(".")
+    FourthTrimesterWhole, FourthTrimesterDecimal = futa.FourthTrimester.split(".")
+    TotalTaxLiabilityWhole, TotalTaxLiabilityDecimal = futa.TotalTaxLiability.split(".")
     futaValuesList = [
         futa.EiNumber[:2],
         futa.EiNumber[2:],
@@ -66,18 +73,23 @@ def Fill_Futa(pk:int):
         FutaFeeYearIncludingExcessDecimal,
         BalanceDueWhole,
         BalanceDueDecimal,
-        ExcessPayment2,
-        ExcessPayment2,
+        ExcessPaymentWhole2,
+        ExcessPaymentDecimal2,
         futa.ApplyNextStatement,
         futa.SendRefund,
         futa.LegalName,
         futa.EiNumber[:2],
         futa.EiNumber[2:],
-        FirstTrimester,
-        SecondTrimester,
-        ThirdTrimester,
-        FourthTrimester,
-        TotalTaxLiability,
+        FirstTrimesterWhole,
+        FirstTrimesterDecimal,
+        SecondTrimesterWhole,
+        SecondTrimesterDecimal,
+        ThirdTrimesterWhole,
+        ThirdTrimesterDecimal,
+        FourthTrimesterWhole,
+        FourthTrimesterDecimal,
+        TotalTaxLiabilityWhole,
+        TotalTaxLiabilityDecimal,
         futa.IRSEmployAllow,
         futa.IRSEmployName,
         futa.IRSEmployPhone,
@@ -107,15 +119,18 @@ def Fill_Futa(pk:int):
         futa.LegalName,
         futa.Address,
         futa.City + ", " + futa.State+ ", " + futa.Zip,
-
-
-         
-  
     ]
     doc = pymupdf.open("file.pdf") #load file
     counter =0
     for page in doc:
         for field in page.widgets():
-            field.field_value= counter
+            if futaValuesList[counter] is None:
+                futaValuesList[counter]= ""
+            if field.field_type ==2:
+                if futaValuesList[counter]:
+                    field.field_value = field.on_state()
+            else:
+                field.field_value= str(futaValuesList[counter])
             field.update()
             counter+=1
+    doc.save("file"+str(pk)+".pdf")
