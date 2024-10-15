@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,9 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-STATIC_ROOT ="public/static"
-STATIC_URL = "static/"
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,6 +40,8 @@ INSTALLED_APPS = [
     'pdf_manager',
     'myapp',
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -73,6 +73,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+ASGI_APPLICATION = 'config.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
