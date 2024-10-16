@@ -1,10 +1,12 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 import pymupdf
 from .models import FutaModel
 # Create your views here.
 
 
-def Fill_Futa(pk:int):
+def Fill_Futa(request, pk:int):
+    print("working")
     futa = FutaModel.objects.get(pk=pk)
     TotalEmployePaymentWhole,TotalEmployePaymentDecimal = futa.TotalEmployePayment.split(".") #verificar que sea un punto o una coma
     ExentPaymentWhole,ExentPaymentDecimal = futa.ExentPayment.split(".") #verificar que sea un punto o una coma
@@ -16,7 +18,7 @@ def Fill_Futa(pk:int):
     SomesalaryFutaWhole, SomesalaryFutaDecimal = futa.SomesalaryFuta.split(".")
     CreditReductionWhole, CreditReductionDecimal= futa.CreditReduction.split(".")
     TotalFutaFeeAfterAdjustWhole, TotalFutaFeeAfterAdjustDecimal = futa.TotalFutaFeeAfterAdjust.split(".")
-    FutaFeeYearIncludingExcessWhole, FutaFeeYearIncludingExcessDecimal= futa.FutaFeeYearIncludingExces.split(".")
+    FutaFeeYearIncludingExcessWhole, FutaFeeYearIncludingExcessDecimal= futa.FutaFeeYearIncludingExcess.split(".")
     BalanceDueWhole, BalanceDueDecimal = futa.BalanceDue.split(".")
     ExcessPaymentWhole2, ExcessPaymentDecimal2 = futa.ExcessPayment2.split(".")
     FirstTrimesterWhole, FirstTrimesterDecimal = futa.FirstTrimester.split(".")
@@ -120,7 +122,7 @@ def Fill_Futa(pk:int):
         futa.Address,
         futa.City + ", " + futa.State+ ", " + futa.Zip,
     ]
-    doc = pymupdf.open("file.pdf") #load file
+    doc = pymupdf.open("files/file.pdf") #load file
     counter =0
     for page in doc:
         for field in page.widgets():
@@ -133,4 +135,9 @@ def Fill_Futa(pk:int):
                 field.field_value= str(futaValuesList[counter])
             field.update()
             counter+=1
-    doc.save("file"+str(pk)+".pdf")
+    doc.save("files/file"+str(pk)+".pdf")
+    #return file
+    with open("files/file"+str(pk)+".pdf", 'rb') as pdf:
+        response = HttpResponse(pdf.read(), content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="files/file'+str(pk)+'.pdf"'
+        return response
